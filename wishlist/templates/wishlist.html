@@ -1,25 +1,62 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h5>Nama: </h5>
-<p>{{nama}}</p>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Wishlist</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
 
-<table>
-    <tr>
-    <th>Nama Barang</th>
-    <th>Harga Barang</th>
-    <th>Deskripsi</th>
-    </tr>
-    {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
-    {% for barang in list_barang %}
-    <tr>
-        <th>{{barang.nama_barang}}</th>
-        <th>{{barang.harga_barang}}</th>
-        <th>{{barang.deskripsi}}</th>
-    </tr>
-    {% endfor %}
-</table>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-<button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+<body>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 
+	<nav class="navbar navbar-expand-lg navbar-info bg-info">
+	  <div class="container-fluid">
+		<a class="navbar-brand" href="https://id.wikipedia.org/wiki/Fakultas_Ilmu_Komputer_Universitas_Indonesia">
+			<img src="https://upload.wikimedia.org/wikipedia/id/thumb/c/c3/Makara_of_Fasilkom_UI.svg/1200px-Makara_of_Fasilkom_UI.svg.png" width="80" height="30" alt="">
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="nav-item dropdown">
+		  <ul class="navbar-nav">
+			<li class="nav-item dropdown">
+			  <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				Menu
+			  </a>
+			  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+				<li><a class="dropdown-item" href="{% url 'wishlist:show_xml' %}">XML</a></li>
+				<li><a class="dropdown-item" href="{% url 'wishlist:show_json' %}">JSON</a></li>
+				<li><a class="dropdown-item" href="{% url 'wishlist:logout' %}">Logout</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div>
+	  </div>
+	</nav>
+
+	<h5>Nama: <span style="font-weight:normal"><font size="4">{{nama}}</font></span></h5>
+	<h5>Angkatan: <span style="font-weight:normal"><font size="4">2021</font></span></h5>
+
+	<table class="table table-striped table-bordered">
+		<thead class="table-danger">
+			<tr>
+			<th>Nama Barang</th>
+			<th>Harga Barang</th>
+			<th>Deskripsi</th>
+		</thead>
+		</tr>
+		{% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+		{% for barang in list_barang %}
+		<tr>
+			<td>{{barang.nama_barang}}</td>
+			<td>{{barang.harga_barang}}</td>
+			<td>{{barang.deskripsi}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<p>Sesi terakhir login: {{ last_login }}</p>
+</body>
 {% endblock content %}
+    
