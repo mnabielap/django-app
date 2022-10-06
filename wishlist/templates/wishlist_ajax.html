@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add Wishlist</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+        $.getJSON("{% url 'wishlist:show_json' %}", function(json) {
+            var tables = [];
+            $.each(json, function(index, val){
+                var row = [];
+                var fields = val.fields
+                row.push("<td>" + String(val.fields.nama_barang) + "</td>");
+                row.push("<td>" + val.fields.harga_barang + "</td>");
+                row.push("<td>" + val.fields.deskripsi + "</td>");
+                tables.push("<tr>" + row.join("") + "</tr>");
+            });
+            document.getElementById("list_barang").innerHTML = tables.join("");
+        });
+
+        $("#tambah_barang_form").submit(function(e){
+            e.preventDefault();
+            $(".btnClick").prop('disabled', true);
+            $(".btnClick").text('Processing');
+            var $form = $(this);
+            var serializedData = $form.serialize();
+            $.ajax({
+                url: "{% url 'wishlist:tambah_barang' %}",
+                type: "POST",
+                data: serializedData,
+                dataType: 'text',
+                success: function (data) {
+                    $(".btnClick").prop('disabled', false);
+                    $(".btnClick").text('Submit');
+                    $.getJSON("{% url 'wishlist:show_json' %}", function(json) {
+                        var tables = [];
+                        $.each(json, function(index, val){
+                            var row = [];
+                            var fields = val.fields
+                            row.push("<td>" + String(val.fields.nama_barang) + "</td>");
+                            row.push("<td>" + val.fields.harga_barang + "</td>");
+                            row.push("<td>" + val.fields.deskripsi + "</td>");
+                            tables.push("<tr>" + row.join("") + "</tr>");
+                        });
+                        document.getElementById("list_barang").innerHTML = tables.join("");
+                    });
+
+                }
+              });
+        });
+    });
+
+</script>
+
+<nav class="navbar navbar-expand-lg navbar-info bg-info">
+  <div class="container-fluid">
+	<a class="navbar-brand" href="#">{{ nama }}</a>
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="nav-item dropdown">
+	  <ul class="navbar-nav">
+		<li class="nav-item dropdown">
+		  <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			Menu
+		  </a>
+		  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+			<li><a class="dropdown-item" href="{% url 'wishlist:show_wishlist' %}">Main Page</a></li>
+			<li><a class="dropdown-item" href="{% url 'wishlist:logout' %}">Logout</a></li>
+		  </ul>
+		</li>
+	  </ul>
+	</div>
+  </div>
+</nav>
+	
+<br>
+<div class="container" >
+    <form class="mb-5" method="POST" name="barang_form" id="tambah_barang_form">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Tambah Barang Wishlist</legend>
+            <input class="form-control mb-3" type="text" placeholder="Nama barang" name="nama_barang">
+            <input class="form-control mb-3" type="number" min="1" step="any" placeholder="Harga barang" name="harga_barang">
+            <textarea class="form-control mb-3" rows="3" placeholder="Deskripsi" name="deskripsi"></textarea>
+            <button type="submit" class="btn btn-primary btnClick">Submit</button>
+        </fieldset>
+    </form>
+
+    <table class="table table-bordered" style="background-color: #e3f2fd;">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Nama Barang</th>
+                <th scope="col">Harga Barang</th>
+                <th scope="col">Deskripsi</th>
+            </tr>
+        </thead>
+        <tbody id="list_barang">
+        </tbody>
+    </table>
+    <p>Sesi terakhir login: {{ last_login }}<p>
+</div>
+
+{% endblock content %}

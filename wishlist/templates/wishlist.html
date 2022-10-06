@@ -19,6 +19,11 @@
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
 		  <span class="navbar-toggler-icon"></span>
 		</button>
+		<form action="{% url "wishlist:show_wishlist_ajax" %}" >
+			<button class="btn btn-success me-3 navbar-btn" type="submit" name="create-task">
+				Add
+			</button>
+		</form>
 		<div class="nav-item dropdown">
 		  <ul class="navbar-nav">
 			<li class="nav-item dropdown">
